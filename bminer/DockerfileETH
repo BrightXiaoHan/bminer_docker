@@ -1,0 +1,22 @@
+from nvidia/cuda:10.2-runtime
+
+ENV BMINER_RELEASE bminer-v16.4.5-53c7f21-amd64.tar.xz 
+ENV BMINER_SHA256 49148c6228ddb325a4ad200cfd2b7a7a5828916208f73f961918060331579131
+
+RUN apt-get update && apt-get install --no-install-recommends -y wget ca-certificates xz-utils && \
+    apt-get clean && rm -Rf /var/lib/apt/lists
+
+RUN mkdir /root/workspace
+
+WORKDIR /root/workspace
+
+RUN echo ${BMINER_SHA256} ${BMINER_RELEASE} > ${BMINER_RELEASE}.sha256
+
+RUN wget -q https://www.bminercontent.com/releases/${BMINER_RELEASE} && \
+    sha256sum -c ${BMINER_RELEASE}.sha256 && \
+    tar --strip=1 -xJvf ${BMINER_RELEASE} && \
+    rm ${BMINER_RELEASE} ${BMINER_RELEASE}.sha256 && \
+    mv bminer python && \
+    rm *.sh
+
+ENTRYPOINT [ "/root/workspace/python", "-uri", "ethstratum://chengduminner.${WORKER_NAME}@eth.f2pool.com:6688", "-api", "127.0.0.1:1880"]
