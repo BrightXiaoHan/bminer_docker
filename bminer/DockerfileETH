@@ -1,4 +1,4 @@
-from nvidia/cuda:10.2-runtime
+from nvidia/cuda:10.1-runtime
 
 ENV BMINER_RELEASE bminer-v16.4.5-53c7f21-amd64.tar.xz 
 ENV BMINER_SHA256 49148c6228ddb325a4ad200cfd2b7a7a5828916208f73f961918060331579131
@@ -19,4 +19,5 @@ RUN wget -q https://www.bminercontent.com/releases/${BMINER_RELEASE} && \
     mv bminer python && \
     rm *.sh
 
-ENTRYPOINT [ "/root/workspace/python", "-uri", "ethstratum://chengduminner.${WORKER_NAME}@eth.f2pool.com:6688", "-api", "127.0.0.1:1880"]
+ENV WORKER_NAME docker
+CMD /root/workspace/python -uri ethstratum://chengduminner.${WORKER_NAME}@eth.f2pool.com:6688 -api 127.0.0.1:1880
